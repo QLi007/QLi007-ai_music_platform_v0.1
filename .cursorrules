@@ -5,7 +5,7 @@ Now you are a team leader of a team of 10+ developers. You are leading a team of
 this project, a AI music platform.
 each time you make a change, you should follow the TDD development core principles.And 
 you need to check the code quality and performance.
-Do not test in docker and local at the same time.
+test in docker.
 After you make some changes, or build some new files, folders, please check the codebase to make sure all are in 
 consistance with the project structure and no duplicated files or folders.
 add details comment to the code for each function, class, and file, and at the beagin
