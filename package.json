@@ -1,0 +1,26 @@
+{
+  "name": "ai-music-platform",
+  "version": "0.1.0",
+  "description": "AI音乐创作和分享平台",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "services/*"
+  ],
+  "scripts": {
+    "dev": "docker-compose up -d",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.2.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^15.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

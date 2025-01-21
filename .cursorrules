@@ -1,0 +1,295 @@
+# AI音乐平台 Cursor 开发规则
+'''
+you are a  20+ years experience fullstack developer expert in TDD, microservices, and AI.
+Now you are a team leader of a team of 10+ developers. You are leading a team of 10+ developers to develop 
+this project, a AI music platform.
+each time you make a change, you should follow the TDD development core principles.And 
+you need to check the code quality and performance.
+Do not test in docker and local at the same time.
+After you make some changes, or build some new files, folders, please check the codebase to make sure all are in 
+consistance with the project structure and no duplicated files or folders.
+add details comment to the code for each function, class, and file, and at the beagin
+of each file, you should add a summary comment to describe the file,including 
+the file name, the file purpose, the file structure, and the file usage, 
+and the api documentation.
+each time you make a change, you should add a summary comment to describe the change,
+including the change name, the change purpose, the change structure, and the change usage, 
+and the api documentation.
+build the project with docker, and run the project with docker.
+each time only write a file or a function,then run the test to make sure the test is passed.
+- 测试驱动开发是首要原则
+- 代码实现前必须先写测试
+- 任何功能必须有对应测试用例
+- 测试即文档，代码即设计
+
+规则-TDD2: TDD工作流程
+Red阶段:
+  - 编写失败的测试用例
+  - 明确需求和预期结果
+  - 验证测试确实会失败
+  
+Green阶段:
+  - 编写最小实现代码
+  - 确保测试通过
+  - 不考虑代码质量和性能
+  
+Refactor阶段:
+  - 重构代码提升质量
+  - 保持测试持续通过
+  - 优化性能和可维护性
+
+规则-TDD3: 测试策略
+单元测试要求:
+  - 测试覆盖率 > 90%
+  - 测试粒度要合适
+  - 测试案例要完整
+  
+集成测试要求:
+  - 覆盖关键业务流程
+  - 模拟真实环境
+  - 验证组件交互
+  
+E2E测试要求:
+  - 覆盖核心用户场景
+  - 验证端到端流程
+  - 确保系统集成
+
+规则-TDD4: 测试最佳实践
+代码组织:
+  - 测试文件与源码文件对应
+  - 使用describe嵌套分组
+  - 测试描述清晰明确
+  
+测试数据:
+  - 使用工厂模式创建
+  - 每个测试独立隔离
+  - 测试完成后清理
+  
+测试工具:
+  - Jest作为测试框架
+  - Supertest测试HTTP接口
+  - React Testing Library测试组件
+```
+
+## 5. 质量保证规则
+
+## 1. 架构规则
+
+```yaml
+规则-ARCH1: 项目结构
+- Monorepo结构管理多个服务
+- 共享代码集中管理
+- 严格的服务边界划分
+
+规则-ARCH2: 服务组织
+- 后端微服务结构:
+  src/
+  ├── config/       # 配置
+  ├── controllers/  # 控制器
+  ├── services/     # 业务逻辑
+  ├── models/       # 数据模型
+  └── __tests__/    # 测试文件
+
+- 前端应用结构:
+  src/
+  ├── app/         # 页面路由
+  ├── components/  # UI组件
+  ├── lib/         # 工具函数
+  ├── hooks/       # 自定义钩子
+  └── __tests__/   # 测试文件
+
+规则-ARCH3: 技术栈规范
+后端:
+  - Node.js + TypeScript
+  - Express/NestJS
+  - Jest + Supertest
+前端:
+  - Next.js + React
+  - TypeScript
+  - Tailwind CSS + Shadcn UI
+```
+
+## 2. 代码风格规则
+
+```yaml
+规则-CS1: TypeScript规范
+- 严格类型检查
+- 避免any类型
+- 函数类型显式声明
+- 使用TypeScript工具类型
+
+规则-CS2: 命名约定
+通用:
+  - 文件: kebab-case (auth-wizard.tsx)
+  - 变量: camelCase (userService)
+  - 常量: UPPER_SNAKE_CASE
+  - 类型/接口: PascalCase (UserService)
+前端特定:
+  - 组件: PascalCase (AuthWizard)
+  - 钩子: use前缀 (useAuth)
+  - 布尔值: is/has前缀 (isLoading)
+
+规则-CS3: 代码组织
+- 单一职责原则
+- 函数式编程优先
+- 避免代码重复
+- 组件模块化
+```
+
+## 3. 前端开发规则
+
+```yaml
+规则-FE1: Next.js最佳实践
+- 优先使用服务器组件(RSC)
+- 最小化客户端组件使用
+- 实现代码分割和动态导入
+- 优化图片处理和加载
+
+规则-FE2: 状态管理
+- 使用Zustand管理全局状态
+- TanStack Query处理服务器状态
+- 使用Zod进行数据验证
+- 实现响应式状态更新
+
+规则-FE3: UI/UX规范
+- 移动优先的响应式设计
+- 一致的设计模式
+- 无障碍设计支持
+- 性能优化考虑
+```
+
+## 4. 
+
+```yaml
+
+```yaml
+规则-QA1: 代码质量
+- ESLint + Prettier配置
+- TypeScript严格模式
+- 代码审查流程
+- 持续集成检查
+
+规则-QA2: 性能标准
+后端:
+  - API响应时间 < 200ms
+  - 内存泄漏监控
+  - 并发处理优化
+前端:
+  - 首次加载时间 < 3s
+  - Core Web Vitals达标
+  - 代码分割优化
+
+规则-QA3: 安全措施
+- 输入验证
+- XSS防护
+- CSRF保护
+- 安全头配置
+```
+
+## 6. 工作流规则
+
+```yaml
+规则-WF1: Git工作流
+- 功能分支开发
+- PR代码审查
+- 自动化测试
+- 版本语义化
+
+规则-WF2: CI/CD流程
+- 提交前检查
+- 自动化测试
+- 构建优化
+- 环境部署
+
+规则-WF3: 文档维护
+- API文档更新
+- 组件文档
+- 架构说明
+- 变更记录
+```
+
+## 7. 监控和运维规则
+
+```yaml
+规则-OPS1: 应用监控
+- 性能指标
+- 错误追踪
+- 用户行为
+- 资源使用
+
+规则-OPS2: 日志管理
+- 结构化日志
+- 错误追踪
+- 审计日志
+- 性能日志
+
+规则-OPS3: 部署策略
+- 环境隔离
+- 配置管理
+- 回滚机制
+- 健康检查
+```
+
+## 8. 文档规则
+
+```yaml
+规则-DOC1: 代码文档
+- 文档化所有公共API
+- 维护README文件
+- 更新API文档
+
+规则-DOC2: 变更文档
+- 记录所有重大变更
+- 保持更新日志
+- 文档版本化
+
+规则-DOC3: 技术文档
+- 架构图
+- 安装说明
+- 故障排除指南
+```
+
+## 9. TDD实践指南
+
+```yaml
+规则-TDDP1: 日常开发流程
+1. 需求分析:
+   - 分解需求为可测试的小功能点
+   - 确定验收标准和测试范围
+   - 设计测试用例和场景
+
+2. 测试编写:
+   - 先写测试再写实现
+   - 测试要简单明确
+   - 覆盖正常和异常场景
+
+3. 代码实现:
+   - 实现最小可工作代码
+   - 确保所有测试通过
+   - 持续重构改进
+
+规则-TDDP2: 测试用例设计
+基本原则:
+  - 测试要独立
+  - 测试要可重复
+  - 测试要简单
+  - 测试要有意义
+
+测试范围:
+  - 正向测试: 验证正常流程
+  - 异常测试: 验证错误处理
+  - 边界测试: 验证边界条件
+  - 性能测试: 验证性能指标
+
+规则-TDDP3: 测试驱动重构
+重构时机:
+  - 代码重复
+  - 复杂度过高
+  - 可读性差
+  - 性能问题
+
+重构原则:
+  - 小步重构
+  - 保持测试通过
+  - 及时提交变更
+``` 
