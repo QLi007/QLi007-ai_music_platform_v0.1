@@ -1,0 +1,11 @@
+com/aimusic/backend/domain/entity/MusicStatus.class
+com/aimusic/backend/domain/dto/MusicGenerationRequest.class
+com/aimusic/backend/exception/GlobalExceptionHandler.class
+com/aimusic/backend/domain/service/MusicService.class
+com/aimusic/backend/controller/MusicController.class
+com/aimusic/backend/domain/dto/MusicDTO.class
+com/aimusic/backend/exception/EntityNotFoundException.class
+com/aimusic/backend/domain/entity/Music.class
+com/aimusic/backend/domain/repository/MusicRepository.class
+com/aimusic/backend/domain/service/impl/MusicServiceImpl.class
+com/aimusic/backend/AiMusicApplication.class

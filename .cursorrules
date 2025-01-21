@@ -17,6 +17,9 @@ including the change name, the change purpose, the change structure, and the cha
 and the api documentation.
 build the project with docker, and run the project with docker.
 each time only write a file or a function,then run the test to make sure the test is passed.
+each time error occurs, you should tell me why it happens, and then fix the error,
+ and then run the test to make sure the test is passed.
+ backend developmen and test should use dto not entiry for safety.
 - 测试驱动开发是首要原则
 - 代码实现前必须先写测试
 - 任何功能必须有对应测试用例

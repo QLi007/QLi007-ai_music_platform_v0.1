@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoggingAspect.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AI Music Platform Backend</a> &gt; <a href="index.source.html" class="el_package">com.aimusic.backend.aspect</a> &gt; <span class="el_source">LoggingAspect.java</span></div><h1>LoggingAspect.java</h1><pre class="source lang-java linenums">package com.aimusic.backend.aspect;
+
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Optional;
+
+/**
+ * 日志切面
+ * 用于记录方法调用、参数、返回值和执行时间等信息
+ *
+ * @author AI Music Team
+ * @version 0.1.0
+ */
+<span class="fc" id="L25">@Slf4j</span>
+@Aspect
+@Component
+<span class="fc" id="L28">public class LoggingAspect {</span>
+
+    /**
+     * 定义切点 - 所有控制器
+     */
+    @Pointcut(&quot;within(@org.springframework.web.bind.annotation.RestController *)&quot;)
+<span class="nc" id="L34">    public void controllerPointcut() {}</span>
+
+    /**
+     * 定义切点 - 所有服务
+     */
+    @Pointcut(&quot;within(@org.springframework.stereotype.Service *)&quot;)
+<span class="nc" id="L40">    public void servicePointcut() {}</span>
+
+    /**
+     * 环绕通知 - 记录控制器方法的调用
+     */
+    @Around(&quot;controllerPointcut()&quot;)
+    public Object logController(ProceedingJoinPoint joinPoint) throws Throwable {
+<span class="fc" id="L47">        return logMethodExecution(joinPoint, true);</span>
+    }
+
+    /**
+     * 环绕通知 - 记录服务方法的调用
+     */
+    @Around(&quot;servicePointcut()&quot;)
+    public Object logService(ProceedingJoinPoint joinPoint) throws Throwable {
+<span class="nc" id="L55">        return logMethodExecution(joinPoint, false);</span>
+    }
+
+    /**
+     * 记录方法执行的详细信息
+     *
+     * @param joinPoint 连接点
+     * @param isController 是否为控制器方法
+     * @return 方法执行结果
+     * @throws Throwable 如果方法执行出错
+     */
+    private Object logMethodExecution(ProceedingJoinPoint joinPoint, boolean isController) throws Throwable {
+<span class="fc" id="L67">        MethodSignature signature = (MethodSignature) joinPoint.getSignature();</span>
+<span class="fc" id="L68">        String methodName = signature.getDeclaringType().getSimpleName() + &quot;.&quot; + signature.getName();</span>
+        
+        // 记录请求信息
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (isController) {</span>
+<span class="fc" id="L72">            logRequest(methodName);</span>
+        }
+
+        // 记录方法参数
+<span class="fc" id="L76">        log.debug(&quot;开始执行: {} 参数: {}&quot;, methodName, Arrays.toString(joinPoint.getArgs()));</span>
+
+        // 计时
+<span class="fc" id="L79">        StopWatch stopWatch = new StopWatch();</span>
+<span class="fc" id="L80">        stopWatch.start();</span>
+
+        try {
+            // 执行方法
+<span class="fc" id="L84">            Object result = joinPoint.proceed();</span>
+<span class="fc" id="L85">            stopWatch.stop();</span>
+
+            // 记录执行结果
+<span class="fc" id="L88">            log.debug(&quot;执行完成: {} 耗时: {}ms 返回值: {}&quot;, </span>
+                    methodName, 
+<span class="fc" id="L90">                    stopWatch.getTotalTimeMillis(),</span>
+                    result);
+
+<span class="fc" id="L93">            return result;</span>
+<span class="fc" id="L94">        } catch (Throwable e) {</span>
+<span class="fc" id="L95">            stopWatch.stop();</span>
+            // 记录异常信息
+<span class="fc" id="L97">            log.error(&quot;执行异常: {} 耗时: {}ms 异常: {}&quot;, </span>
+                    methodName, 
+<span class="fc" id="L99">                    stopWatch.getTotalTimeMillis(), </span>
+<span class="fc" id="L100">                    e.getMessage(), </span>
+                    e);
+<span class="fc" id="L102">            throw e;</span>
+        }
+    }
+
+    /**
+     * 记录HTTP请求信息
+     *
+     * @param methodName 方法名
+     */
+    private void logRequest(String methodName) {
+<span class="fc" id="L112">        Optional.ofNullable(RequestContextHolder.getRequestAttributes())</span>
+<span class="fc" id="L113">                .map(attributes -&gt; (ServletRequestAttributes) attributes)</span>
+<span class="fc" id="L114">                .map(ServletRequestAttributes::getRequest)</span>
+<span class="fc" id="L115">                .ifPresent(request -&gt; log.info(&quot;接收请求: {} {} {}&quot;, </span>
+                        methodName,
+<span class="fc" id="L117">                        request.getMethod(),</span>
+<span class="fc" id="L118">                        getRequestPath(request)));</span>
+<span class="fc" id="L119">    }</span>
+
+    /**
+     * 获取请求路径
+     *
+     * @param request HTTP请求
+     * @return 请求路径
+     */
+    private String getRequestPath(HttpServletRequest request) {
+<span class="fc" id="L128">        String queryString = request.getQueryString();</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        return queryString != null ? </span>
+<span class="nc" id="L130">                request.getRequestURI() + &quot;?&quot; + queryString : </span>
+<span class="fc" id="L131">                request.getRequestURI();</span>
+    }
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MusicServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AI Music Platform Backend</a> &gt; <a href="index.source.html" class="el_package">com.aimusic.backend.domain.service.impl</a> &gt; <span class="el_source">MusicServiceImpl.java</span></div><h1>MusicServiceImpl.java</h1><pre class="source lang-java linenums">package com.aimusic.backend.domain.service.impl;
+
+import com.aimusic.backend.domain.dto.MusicDTO;
+import com.aimusic.backend.domain.dto.MusicGenerationRequest;
+import com.aimusic.backend.domain.entity.Music;
+import com.aimusic.backend.domain.entity.MusicStatus;
+import com.aimusic.backend.domain.repository.MusicRepository;
+import com.aimusic.backend.domain.service.MusicService;
+import com.aimusic.backend.exception.EntityNotFoundException;
+import io.micrometer.core.annotation.Timed;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+
+/**
+ * 音乐服务实现类
+ * 
+ * @author AI Music Team
+ * @version 0.1.0
+ */
+<span class="fc" id="L29">@Slf4j</span>
+@Service
+<span class="fc" id="L31">@RequiredArgsConstructor</span>
+public class MusicServiceImpl implements MusicService {
+
+    private final MusicRepository musicRepository;
+    
+    @Override
+    @Transactional
+    @Timed(value = &quot;music.generation.request&quot;, description = &quot;音乐生成请求处理时间&quot;)
+    public MusicDTO generateMusic(MusicGenerationRequest request) {
+<span class="fc" id="L40">        log.info(&quot;开始生成音乐, request: {}&quot;, request);</span>
+        
+        // 创建音乐记录
+<span class="fc" id="L43">        Music music = new Music();</span>
+<span class="fc" id="L44">        music.setPrompt(request.getPrompt());</span>
+<span class="fc" id="L45">        music.setStyle(request.getStyle());</span>
+<span class="fc" id="L46">        music.setDuration(request.getDuration());</span>
+<span class="fc" id="L47">        music.setStatus(MusicStatus.PENDING);</span>
+        
+        // 保存音乐记录
+<span class="fc" id="L50">        Music savedMusic = musicRepository.save(music);</span>
+<span class="fc" id="L51">        log.info(&quot;音乐生成任务创建成功, id: {}&quot;, savedMusic.getId());</span>
+        
+        // 异步执行音乐生成
+<span class="fc" id="L54">        generateMusicAsync(savedMusic.getId());</span>
+        
+<span class="fc" id="L56">        return convertToDTO(savedMusic);</span>
+    }
+    
+    @Async(&quot;musicGenerationExecutor&quot;)
+    protected CompletableFuture&lt;Void&gt; generateMusicAsync(UUID musicId) {
+<span class="fc" id="L61">        return CompletableFuture.runAsync(() -&gt; {</span>
+            try {
+<span class="fc" id="L63">                log.info(&quot;开始异步生成音乐, id: {}&quot;, musicId);</span>
+                
+                // 更新状态为生成中
+<span class="fc" id="L66">                Music music = musicRepository.findById(musicId)</span>
+<span class="pc" id="L67">                        .orElseThrow(() -&gt; new EntityNotFoundException(&quot;音乐不存在&quot;));</span>
+<span class="nc" id="L68">                music.setStatus(MusicStatus.GENERATING);</span>
+<span class="nc" id="L69">                musicRepository.save(music);</span>
+                
+                // TODO: 调用AI服务生成音乐
+                // 这里模拟生成过程
+<span class="nc" id="L73">                Thread.sleep(5000);</span>
+                
+                // 生成成功，更新状态和URL
+<span class="nc" id="L76">                music.setStatus(MusicStatus.COMPLETED);</span>
+<span class="nc" id="L77">                music.setUrl(&quot;http://example.com/music/&quot; + musicId + &quot;.mp3&quot;);</span>
+<span class="nc" id="L78">                musicRepository.save(music);</span>
+                
+<span class="nc" id="L80">                log.info(&quot;音乐生成完成, id: {}&quot;, musicId);</span>
+<span class="fc" id="L81">            } catch (Exception e) {</span>
+<span class="fc" id="L82">                log.error(&quot;音乐生成失败, id: {}&quot;, musicId, e);</span>
+                try {
+                    // 更新状态为失败
+<span class="fc" id="L85">                    Music music = musicRepository.findById(musicId)</span>
+<span class="pc" id="L86">                            .orElseThrow(() -&gt; new EntityNotFoundException(&quot;音乐不存在&quot;));</span>
+<span class="nc" id="L87">                    music.setStatus(MusicStatus.FAILED);</span>
+<span class="nc" id="L88">                    musicRepository.save(music);</span>
+<span class="fc" id="L89">                } catch (Exception ex) {</span>
+<span class="fc" id="L90">                    log.error(&quot;更新音乐状态失败, id: {}&quot;, musicId, ex);</span>
+<span class="nc" id="L91">                }</span>
+<span class="nc" id="L92">            }</span>
+<span class="fc" id="L93">        });</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    @Timed(value = &quot;music.get.by.id&quot;, description = &quot;根据ID获取音乐信息的处理时间&quot;)
+    public MusicDTO getMusicById(UUID id) {
+<span class="fc" id="L100">        log.info(&quot;查询音乐详情, id: {}&quot;, id);</span>
+        
+<span class="fc" id="L102">        return musicRepository.findById(id)</span>
+<span class="fc" id="L103">                .map(this::convertToDTO)</span>
+<span class="fc" id="L104">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;音乐不存在&quot;));</span>
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    @Timed(value = &quot;music.list&quot;, description = &quot;分页查询音乐列表的处理时间&quot;)
+    public Page&lt;MusicDTO&gt; listMusic(Pageable pageable) {
+<span class="fc" id="L111">        log.info(&quot;分页查询音乐列表, pageable: {}&quot;, pageable);</span>
+        
+<span class="fc" id="L113">        return musicRepository.findAllByOrderByCreatedAtDesc(pageable)</span>
+<span class="fc" id="L114">                .map(this::convertToDTO);</span>
+    }
+    
+    @Override
+    @Transactional
+    @Timed(value = &quot;music.status.update&quot;, description = &quot;更新音乐状态的处理时间&quot;)
+    public void updateMusicStatus(UUID id, String url) {
+<span class="fc" id="L121">        log.info(&quot;更新音乐状态, id: {}, url: {}&quot;, id, url);</span>
+        
+<span class="fc" id="L123">        Music music = musicRepository.findById(id)</span>
+<span class="fc" id="L124">                .orElseThrow(() -&gt; new EntityNotFoundException(&quot;音乐不存在&quot;));</span>
+        
+<span class="fc" id="L126">        music.setStatus(MusicStatus.COMPLETED);</span>
+<span class="fc" id="L127">        music.setUrl(url);</span>
+        
+<span class="fc" id="L129">        musicRepository.save(music);</span>
+<span class="fc" id="L130">        log.info(&quot;音乐状态更新成功&quot;);</span>
+<span class="fc" id="L131">    }</span>
+    
+    /**
+     * 将实体转换为DTO
+     */
+    private MusicDTO convertToDTO(Music music) {
+<span class="fc" id="L137">        MusicDTO dto = new MusicDTO();</span>
+<span class="fc" id="L138">        dto.setId(music.getId());</span>
+<span class="fc" id="L139">        dto.setPrompt(music.getPrompt());</span>
+<span class="fc" id="L140">        dto.setStyle(music.getStyle());</span>
+<span class="fc" id="L141">        dto.setDuration(music.getDuration());</span>
+<span class="fc" id="L142">        dto.setStatus(music.getStatus());</span>
+<span class="fc" id="L143">        dto.setUrl(music.getUrl());</span>
+<span class="fc" id="L144">        dto.setCreatedAt(music.getCreatedAt());</span>
+<span class="fc" id="L145">        dto.setUpdatedAt(music.getUpdatedAt());</span>
+<span class="fc" id="L146">        return dto;</span>
+    }
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
