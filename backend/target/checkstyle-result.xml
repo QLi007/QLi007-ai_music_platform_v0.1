@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.3">
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/AiMusicApplication.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+<error line="13" column="1" severity="warning" message="Utility classes should not have a public or default constructor." source="com.puppycrawl.tools.checkstyle.checks.design.HideUtilityClassConstructorCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/config/OpenApiConfig.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/config/AsyncConfig.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/config/MonitoringConfig.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/controller/MusicController.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+<error line="20" column="47" severity="warning" message="Using the &apos;.*&apos; form of import should be avoided - org.springframework.web.bind.annotation.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/aspect/LoggingAspect.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/aspect/PerformanceMonitorAspect.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/dto/MusicDTO.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/dto/MusicGenerationRequest.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+<error line="3" column="38" severity="warning" message="Using the &apos;.*&apos; form of import should be avoided - jakarta.validation.constraints.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/dto/ErrorResponse.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/repository/MusicRepository.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/entity/MusicStatus.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/entity/Music.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+<error line="3" column="27" severity="warning" message="Using the &apos;.*&apos; form of import should be avoided - jakarta.persistence.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/service/impl/MusicServiceImpl.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+<error line="19" column="8" severity="warning" message="Unused import - java.time.LocalDateTime." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
+<error line="71" column="19" severity="warning" message="Comment matches to-do format &apos;TODO:&apos;." source="com.puppycrawl.tools.checkstyle.checks.TodoCommentCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/service/MusicService.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/exception/EntityNotFoundException.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/exception/GlobalExceptionHandler.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+</checkstyle>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AI Music Platform Backend</a> &gt; <a href="index.source.html" class="el_package">com.aimusic.backend.exception</a> &gt; <span class="el_source">GlobalExceptionHandler.java</span></div><h1>GlobalExceptionHandler.java</h1><pre class="source lang-java linenums">package com.aimusic.backend.exception;
+
+import com.aimusic.backend.domain.dto.ErrorResponse;
+import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+/**
+ * 全局异常处理器
+ * 统一处理应用中的各类异常，返回标准格式的错误响应
+ * 
+ * @author AI Music Team
+ * @version 0.1.0
+ */
+<span class="fc" id="L29">@Slf4j</span>
+@RestControllerAdvice
+<span class="fc" id="L31">public class GlobalExceptionHandler {</span>
+
+    @Value(&quot;${spring.profiles.active:prod}&quot;)
+    private String activeProfile;
+
+    /**
+     * 处理实体不存在异常
+     */
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleEntityNotFound(
+            EntityNotFoundException ex, 
+            WebRequest request) {
+<span class="fc" id="L43">        log.error(&quot;实体不存在: {}&quot;, ex.getMessage());</span>
+        
+<span class="fc" id="L45">        ErrorResponse response = ErrorResponse.builder()</span>
+<span class="fc" id="L46">                .status(HttpStatus.NOT_FOUND.value())</span>
+<span class="fc" id="L47">                .code(&quot;ENTITY_NOT_FOUND&quot;)</span>
+<span class="fc" id="L48">                .message(ex.getMessage())</span>
+<span class="fc" id="L49">                .timestamp(LocalDateTime.now())</span>
+<span class="fc" id="L50">                .path(request.getDescription(false).substring(4))</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">                .trace(isDev() ? getStackTrace(ex) : null)</span>
+<span class="fc" id="L52">                .build();</span>
+                
+<span class="fc" id="L54">        return ResponseEntity.status(HttpStatus.NOT_FOUND)</span>
+<span class="fc" id="L55">                .body(response);</span>
+    }
+
+    /**
+     * 处理参数校验异常
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleValidationExceptions(
+            MethodArgumentNotValidException ex,
+            WebRequest request) {
+<span class="fc" id="L65">        Map&lt;String, String&gt; errors = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L66">        ex.getBindingResult().getAllErrors().forEach(error -&gt; {</span>
+<span class="fc" id="L67">            String fieldName = ((FieldError) error).getField();</span>
+<span class="fc" id="L68">            String errorMessage = error.getDefaultMessage();</span>
+<span class="fc" id="L69">            errors.put(fieldName, errorMessage);</span>
+<span class="fc" id="L70">        });</span>
+
+<span class="fc" id="L72">        ErrorResponse response = ErrorResponse.builder()</span>
+<span class="fc" id="L73">                .status(HttpStatus.BAD_REQUEST.value())</span>
+<span class="fc" id="L74">                .code(&quot;VALIDATION_FAILED&quot;)</span>
+<span class="fc" id="L75">                .message(&quot;请求参数验证失败&quot;)</span>
+<span class="fc" id="L76">                .details(errors)</span>
+<span class="fc" id="L77">                .timestamp(LocalDateTime.now())</span>
+<span class="fc" id="L78">                .path(request.getDescription(false).substring(4))</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                .trace(isDev() ? getStackTrace(ex) : null)</span>
+<span class="fc" id="L80">                .build();</span>
+
+<span class="fc" id="L82">        return ResponseEntity.status(HttpStatus.BAD_REQUEST)</span>
+<span class="fc" id="L83">                .body(response);</span>
+    }
+
+    /**
+     * 处理约束违反异常
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleConstraintViolation(
+            ConstraintViolationException ex,
+            WebRequest request) {
+<span class="nc" id="L93">        Map&lt;String, String&gt; errors = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L94">        ex.getConstraintViolations().forEach(violation -&gt; {</span>
+<span class="nc" id="L95">            String fieldName = violation.getPropertyPath().toString();</span>
+<span class="nc" id="L96">            String errorMessage = violation.getMessage();</span>
+<span class="nc" id="L97">            errors.put(fieldName, errorMessage);</span>
+<span class="nc" id="L98">        });</span>
+
+<span class="nc" id="L100">        ErrorResponse response = ErrorResponse.builder()</span>
+<span class="nc" id="L101">                .status(HttpStatus.BAD_REQUEST.value())</span>
+<span class="nc" id="L102">                .code(&quot;CONSTRAINT_VIOLATION&quot;)</span>
+<span class="nc" id="L103">                .message(&quot;请求参数约束违反&quot;)</span>
+<span class="nc" id="L104">                .details(errors)</span>
+<span class="nc" id="L105">                .timestamp(LocalDateTime.now())</span>
+<span class="nc" id="L106">                .path(request.getDescription(false).substring(4))</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                .trace(isDev() ? getStackTrace(ex) : null)</span>
+<span class="nc" id="L108">                .build();</span>
+
+<span class="nc" id="L110">        return ResponseEntity.status(HttpStatus.BAD_REQUEST)</span>
+<span class="nc" id="L111">                .body(response);</span>
+    }
+
+    /**
+     * 处理其他未知异常
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleUnknownException(
+            Exception ex,
+            WebRequest request) {
+<span class="nc" id="L121">        log.error(&quot;未知异常&quot;, ex);</span>
+
+<span class="nc" id="L123">        ErrorResponse response = ErrorResponse.builder()</span>
+<span class="nc" id="L124">                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())</span>
+<span class="nc" id="L125">                .code(&quot;INTERNAL_ERROR&quot;)</span>
+<span class="nc" id="L126">                .message(&quot;服务器内部错误&quot;)</span>
+<span class="nc" id="L127">                .timestamp(LocalDateTime.now())</span>
+<span class="nc" id="L128">                .path(request.getDescription(false).substring(4))</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                .trace(isDev() ? getStackTrace(ex) : null)</span>
+<span class="nc" id="L130">                .build();</span>
+
+<span class="nc" id="L132">        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="nc" id="L133">                .body(response);</span>
+    }
+
+    /**
+     * 获取异常堆栈信息
+     */
+    private List&lt;String&gt; getStackTrace(Exception ex) {
+<span class="nc" id="L140">        return Arrays.stream(ex.getStackTrace())</span>
+<span class="nc" id="L141">                .map(StackTraceElement::toString)</span>
+<span class="nc" id="L142">                .limit(20)  // 只返回前20行堆栈信息</span>
+<span class="nc" id="L143">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * 判断是否为开发环境
+     */
+    private boolean isDev() {
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        return &quot;dev&quot;.equalsIgnoreCase(activeProfile) || </span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">               &quot;test&quot;.equalsIgnoreCase(activeProfile);</span>
+    }
+} 
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

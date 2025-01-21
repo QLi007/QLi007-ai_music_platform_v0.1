@@ -1,62 +1,45 @@
 version: '3.8'
 
 services:
-  frontend:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:4000
-    depends_on:
-      - backend
-
   backend:
-    build:
+    build: 
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "4000:4000"
+      - "8080:8080"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/aimusic
-      - REDIS_URL=redis://redis:6379
+      - SPRING_PROFILES_ACTIVE=dev
+      - DATABASE_URL=jdbc:postgresql://postgres:5432/aimusic
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - AI_API_KEY=${AI_API_KEY}
     depends_on:
-      - postgres
-      - redis
-
-  music-generation:
-    build:
-      context: ./services/music-generation-service
-      dockerfile: Dockerfile
-    ports:
-      - "4001:4001"
-    environment:
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/aimusic
-      - REDIS_URL=redis://redis:6379
-    depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+    networks:
+      - aimusic-network
 
   postgres:
     image: postgres:14-alpine
     ports:
       - "5432:5432"
     environment:
+      - POSTGRES_DB=aimusic
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=aimusic
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - aimusic-network
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+networks:
+  aimusic-network:
+    driver: bridge
 
 volumes:
-  postgres_data:
-  redis_data: 
+  postgres_data: 

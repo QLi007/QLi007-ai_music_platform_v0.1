@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.aimusic.backend.controller.MusicControllerTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 40.94 s -- in com.aimusic.backend.controller.MusicControllerTest
