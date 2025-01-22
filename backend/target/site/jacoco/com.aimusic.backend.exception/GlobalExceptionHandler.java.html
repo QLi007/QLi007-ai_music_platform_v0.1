@@ -40,19 +40,19 @@ import java.util.stream.Collectors;
     public ResponseEntity&lt;ErrorResponse&gt; handleEntityNotFound(
             EntityNotFoundException ex, 
             WebRequest request) {
-<span class="fc" id="L43">        log.error(&quot;实体不存在: {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L43">        log.error(&quot;实体不存在: {}&quot;, ex.getMessage());</span>
         
-<span class="fc" id="L45">        ErrorResponse response = ErrorResponse.builder()</span>
-<span class="fc" id="L46">                .status(HttpStatus.NOT_FOUND.value())</span>
-<span class="fc" id="L47">                .code(&quot;ENTITY_NOT_FOUND&quot;)</span>
-<span class="fc" id="L48">                .message(ex.getMessage())</span>
-<span class="fc" id="L49">                .timestamp(LocalDateTime.now())</span>
-<span class="fc" id="L50">                .path(request.getDescription(false).substring(4))</span>
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">                .trace(isDev() ? getStackTrace(ex) : null)</span>
-<span class="fc" id="L52">                .build();</span>
+<span class="nc" id="L45">        ErrorResponse response = ErrorResponse.builder()</span>
+<span class="nc" id="L46">                .status(HttpStatus.NOT_FOUND.value())</span>
+<span class="nc" id="L47">                .code(&quot;ENTITY_NOT_FOUND&quot;)</span>
+<span class="nc" id="L48">                .message(ex.getMessage())</span>
+<span class="nc" id="L49">                .timestamp(LocalDateTime.now())</span>
+<span class="nc" id="L50">                .path(request.getDescription(false).substring(4))</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                .trace(isDev() ? getStackTrace(ex) : null)</span>
+<span class="nc" id="L52">                .build();</span>
                 
-<span class="fc" id="L54">        return ResponseEntity.status(HttpStatus.NOT_FOUND)</span>
-<span class="fc" id="L55">                .body(response);</span>
+<span class="nc" id="L54">        return ResponseEntity.status(HttpStatus.NOT_FOUND)</span>
+<span class="nc" id="L55">                .body(response);</span>
     }
 
     /**
@@ -151,4 +151,4 @@ import java.util.stream.Collectors;
 <span class="pc bpc" id="L151" title="1 of 2 branches missed.">               &quot;test&quot;.equalsIgnoreCase(activeProfile);</span>
     }
 } 
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

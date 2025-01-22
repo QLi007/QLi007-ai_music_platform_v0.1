@@ -1,3 +1,5 @@
+com/aimusic/backend/controller/MusicControllerTest.class
 com/aimusic/backend/service/MusicServiceTest.class
 com/aimusic/backend/config/TestConfig.class
-com/aimusic/backend/controller/MusicControllerTest.class
+com/aimusic/backend/repository/MusicRepositoryTest.class
+com/aimusic/backend/utils/MusicTestFactory.class

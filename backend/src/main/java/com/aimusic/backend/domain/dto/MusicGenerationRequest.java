@@ -1,7 +1,15 @@
 package com.aimusic.backend.domain.dto;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 音乐生成请求
@@ -11,7 +19,17 @@ import lombok.Data;
  * @version 0.1.0
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MusicGenerationRequest {
+    /**
+     * 音乐标题
+     */
+    @NotBlank(message = "标题不能为空")
+    @Size(max = 100, message = "标题长度不能超过100个字符")
+    private String title;
+
     /**
      * 提示词
      * 用于描述想要生成的音乐风格和特点
@@ -27,8 +45,7 @@ public class MusicGenerationRequest {
      * 例如：古典、流行、爵士、电子等
      */
     @NotBlank(message = "音乐风格不能为空")
-    @Pattern(regexp = "^(古典|流行|爵士|电子|民谣|摇滚|蓝调|世界音乐)$", 
-            message = "不支持的音乐风格")
+    @Pattern(regexp = "^(Classical|Jazz|Rock|Pop|Electronic)$", message = "不支持的音乐风格")
     private String style;
 
     /**
@@ -36,7 +53,7 @@ public class MusicGenerationRequest {
      * 限制在10秒到300秒之间
      */
     @NotNull(message = "音乐时长不能为空")
-    @Min(value = 10, message = "音乐时长不能小于10秒")
+    @Min(value = 30, message = "音乐时长不能小于30秒")
     @Max(value = 300, message = "音乐时长不能超过300秒")
     private Integer duration;
 } 

@@ -91,15 +91,15 @@ import java.util.Optional;
                     result);
 
 <span class="fc" id="L93">            return result;</span>
-<span class="fc" id="L94">        } catch (Throwable e) {</span>
-<span class="fc" id="L95">            stopWatch.stop();</span>
+<span class="nc" id="L94">        } catch (Throwable e) {</span>
+<span class="nc" id="L95">            stopWatch.stop();</span>
             // 记录异常信息
-<span class="fc" id="L97">            log.error(&quot;执行异常: {} 耗时: {}ms 异常: {}&quot;, </span>
+<span class="nc" id="L97">            log.error(&quot;执行异常: {} 耗时: {}ms 异常: {}&quot;, </span>
                     methodName, 
-<span class="fc" id="L99">                    stopWatch.getTotalTimeMillis(), </span>
-<span class="fc" id="L100">                    e.getMessage(), </span>
+<span class="nc" id="L99">                    stopWatch.getTotalTimeMillis(), </span>
+<span class="nc" id="L100">                    e.getMessage(), </span>
                     e);
-<span class="fc" id="L102">            throw e;</span>
+<span class="nc" id="L102">            throw e;</span>
         }
     }
 
@@ -131,4 +131,4 @@ import java.util.Optional;
 <span class="fc" id="L131">                request.getRequestURI();</span>
     }
 } 
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

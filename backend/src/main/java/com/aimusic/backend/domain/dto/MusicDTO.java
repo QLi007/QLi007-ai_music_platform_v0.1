@@ -1,7 +1,10 @@
 package com.aimusic.backend.domain.dto;
 
 import com.aimusic.backend.domain.entity.MusicStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,11 +16,19 @@ import java.util.UUID;
  * @version 0.1.0
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MusicDTO {
     /**
      * 音乐ID
      */
     private UUID id;
+
+    /**
+     * 音乐标题
+     */
+    private String title;
 
     /**
      * 提示词

@@ -1,7 +1,10 @@
 package com.aimusic.backend.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,6 +19,9 @@ import java.util.UUID;
  * @version 0.1.0
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "music")
 @EntityListeners(AuditingEntityListener.class)
@@ -24,6 +30,9 @@ public class Music {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
+    private String title;
 
     @Column(nullable = false)
     private String prompt;

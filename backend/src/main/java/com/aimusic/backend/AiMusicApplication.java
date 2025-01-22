@@ -13,6 +13,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableJpaAuditing
 public class AiMusicApplication {
+    
+    public AiMusicApplication() {
+        // 默认构造函数
+    }
+    
     public static void main(String[] args) {
         SpringApplication.run(AiMusicApplication.class, args);
     }

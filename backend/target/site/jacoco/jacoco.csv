@@ -1,9 +1,10 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-AI Music Platform Backend,com.aimusic.backend.exception,GlobalExceptionHandler,113,106,8,4,32,32,10,6,4,6
+AI Music Platform Backend,com.aimusic.backend.exception,GlobalExceptionHandler,147,72,9,3,43,21,11,5,5,5
 AI Music Platform Backend,com.aimusic.backend.exception,EntityNotFoundException,5,4,0,0,2,2,1,1,1,1
 AI Music Platform Backend,com.aimusic.backend.domain.entity,MusicStatus,0,27,0,0,0,5,0,1,0,1
-AI Music Platform Backend,com.aimusic.backend.domain.entity,Music,300,59,70,0,0,9,39,17,4,17
-AI Music Platform Backend,com.aimusic.backend.aspect,LoggingAspect,12,139,2,2,4,31,5,8,3,8
-AI Music Platform Backend,com.aimusic.backend.aspect,PerformanceMonitorAspect,2,178,1,1,2,36,3,3,2,3
-AI Music Platform Backend,com.aimusic.backend.domain.service.impl,MusicServiceImpl,43,198,0,0,11,48,0,13,0,13
+AI Music Platform Backend,com.aimusic.backend.domain.entity,Music.MusicBuilder,24,70,0,0,0,1,1,11,1,11
+AI Music Platform Backend,com.aimusic.backend.domain.entity,Music,337,96,78,0,0,13,44,20,5,20
+AI Music Platform Backend,com.aimusic.backend.aspect,LoggingAspect,41,110,2,2,10,25,5,8,3,8
+AI Music Platform Backend,com.aimusic.backend.aspect,PerformanceMonitorAspect,41,139,1,1,9,29,3,3,2,3
+AI Music Platform Backend,com.aimusic.backend.domain.service.impl,MusicServiceImpl,0,112,0,0,0,32,0,8,0,8
 AI Music Platform Backend,com.aimusic.backend.controller,MusicController,0,34,0,0,0,7,0,5,0,5
