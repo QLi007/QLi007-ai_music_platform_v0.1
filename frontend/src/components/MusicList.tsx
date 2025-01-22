@@ -3,10 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { MusicService } from '../services/musicService';
 import type { Music } from '../types/music';
+import { PAGE_SIZE } from '../constants/pagination';
 
-const PAGE_SIZE = 2; // 设置每页显示2条数据
+interface MusicListProps {
+  onMusicSelect?: (music: Music) => void;
+}
 
-export function MusicList() {
+export function MusicList({ onMusicSelect }: MusicListProps) {
   const [musicList, setMusicList] = useState<Music[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
@@ -84,10 +87,15 @@ export function MusicList() {
   const hasPrevPage = page > 1;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-testid="music-list">
       <div className="grid gap-4 md:grid-cols-2">
         {musicList.map(music => (
-          <div key={music.id} className="p-4 bg-white rounded-lg shadow-md">
+          <div 
+            key={music.id} 
+            data-testid={`music-card-${music.id}`}
+            className="p-4 bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => onMusicSelect?.(music)}
+          >
             <h3 className="text-lg font-semibold mb-2">{music.title || '未命名音乐'}</h3>
             <div className="space-y-2 text-sm text-gray-600">
               <p><span className="font-medium">风格：</span>{getStyleText(music.style)}</p>
@@ -95,12 +103,6 @@ export function MusicList() {
               <p><span className="font-medium">创建时间：</span>
                 {new Date(music.createdAt).toLocaleString('zh-CN')}
               </p>
-              {music.url && (
-                <audio controls className="w-full mt-2">
-                  <source src={music.url} type="audio/mpeg" />
-                  您的浏览器不支持音频播放。
-                </audio>
-              )}
             </div>
           </div>
         ))}
