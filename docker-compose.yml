@@ -8,14 +8,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - DATABASE_URL=jdbc:postgresql://postgres:5432/aimusic
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - AI_API_KEY=${AI_API_KEY}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/aimusic
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
     networks:
       - aimusic-network
 
@@ -24,9 +21,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=aimusic
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      POSTGRES_DB: aimusic
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -36,6 +33,17 @@ services:
       retries: 5
     networks:
       - aimusic-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080/api/v1
+    depends_on:
+      - backend
 
 networks:
   aimusic-network:

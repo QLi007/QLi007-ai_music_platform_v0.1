@@ -1,0 +1,15 @@
+-- 创建音乐状态枚举类型
+CREATE TYPE music_status AS ENUM ('PENDING', 'GENERATING', 'COMPLETED', 'FAILED');
+
+-- 创建音乐表
+CREATE TABLE IF NOT EXISTS music (
+    id UUID PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    prompt TEXT NOT NULL,
+    style VARCHAR(50) NOT NULL,
+    duration INTEGER NOT NULL,
+    status music_status NOT NULL DEFAULT 'PENDING',
+    url VARCHAR(255),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+); 

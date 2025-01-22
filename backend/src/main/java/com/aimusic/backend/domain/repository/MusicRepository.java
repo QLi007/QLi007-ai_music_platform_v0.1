@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 /**
- * 音乐仓储接口
+ * 音乐仓库接口
  * 
  * @author AI Music Team
  * @version 0.1.0
@@ -18,7 +18,7 @@ import java.util.UUID;
 public interface MusicRepository extends JpaRepository<Music, UUID> {
     
     /**
-     * 分页查询所有音乐，按创建时间倒序排序
+     * 按创建时间降序查询所有音乐
      *
      * @param pageable 分页参数
      * @return 音乐分页结果

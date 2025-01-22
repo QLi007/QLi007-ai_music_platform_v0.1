@@ -28,7 +28,6 @@
 </file>
 <file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/dto/MusicGenerationRequest.java">
 <error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
-<error line="3" column="38" severity="warning" message="Using the &apos;.*&apos; form of import should be avoided - jakarta.validation.constraints.*." source="com.puppycrawl.tools.checkstyle.checks.imports.AvoidStarImportCheck"/>
 </file>
 <file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/dto/ErrorResponse.java">
 <error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
@@ -45,8 +44,6 @@
 </file>
 <file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/service/impl/MusicServiceImpl.java">
 <error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
-<error line="19" column="8" severity="warning" message="Unused import - java.time.LocalDateTime." source="com.puppycrawl.tools.checkstyle.checks.imports.UnusedImportsCheck"/>
-<error line="71" column="19" severity="warning" message="Comment matches to-do format &apos;TODO:&apos;." source="com.puppycrawl.tools.checkstyle.checks.TodoCommentCheck"/>
 </file>
 <file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/service/MusicService.java">
 <error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>

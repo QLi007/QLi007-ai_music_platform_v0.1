@@ -68,14 +68,14 @@ public class PerformanceMonitorAspect {
 <span class="fc" id="L68">            Object result = joinPoint.proceed();</span>
 <span class="fc" id="L69">            timer.record(System.nanoTime() - startTime, TimeUnit.NANOSECONDS);</span>
 <span class="fc" id="L70">            return result;</span>
-<span class="fc" id="L71">        } catch (Throwable e) {</span>
+<span class="nc" id="L71">        } catch (Throwable e) {</span>
             // 记录异常
-<span class="fc" id="L73">            meterRegistry.counter(&quot;method.execution.error&quot;,</span>
-<span class="fc" id="L74">                    &quot;class&quot;, signature.getDeclaringType().getSimpleName(),</span>
-<span class="fc" id="L75">                    &quot;method&quot;, signature.getName(),</span>
-<span class="fc" id="L76">                    &quot;exception&quot;, e.getClass().getSimpleName())</span>
-<span class="fc" id="L77">                    .increment();</span>
-<span class="fc" id="L78">            throw e;</span>
+<span class="nc" id="L73">            meterRegistry.counter(&quot;method.execution.error&quot;,</span>
+<span class="nc" id="L74">                    &quot;class&quot;, signature.getDeclaringType().getSimpleName(),</span>
+<span class="nc" id="L75">                    &quot;method&quot;, signature.getName(),</span>
+<span class="nc" id="L76">                    &quot;exception&quot;, e.getClass().getSimpleName())</span>
+<span class="nc" id="L77">                    .increment();</span>
+<span class="nc" id="L78">            throw e;</span>
         } finally {
             // 记录内存使用变化
 <span class="fc" id="L81">            long heapMemoryAfter = memoryMXBean.getHeapMemoryUsage().getUsed();</span>
@@ -102,4 +102,4 @@ public class PerformanceMonitorAspect {
         }
     }
 } 
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

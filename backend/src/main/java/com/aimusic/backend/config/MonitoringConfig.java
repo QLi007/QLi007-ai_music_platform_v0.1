@@ -22,9 +22,13 @@ public class MonitoringConfig {
      */
     @Bean
     public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags(Environment environment) {
-        return registry -> registry.config()
+        return registry -> {
+            String env = environment.getActiveProfiles().length > 0 ? 
+                environment.getActiveProfiles()[0] : "default";
+            registry.config()
                 .commonTags("application", "ai-music-backend")
-                .commonTags("env", environment.getActiveProfiles()[0]);
+                .commonTags("env", env);
+        };
     }
 
     /**
