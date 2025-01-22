@@ -9,6 +9,11 @@ const config = {
   transform: {
     '^.+\\.(t|j)sx?$': ['@swc/jest'],
   },
+  moduleDirectories: ['node_modules', 'src'],
+  testPathIgnorePatterns: [
+    '/node_modules/',
+    '/.next/',
+  ],
   coverageThreshold: {
     global: {
       branches: 80,
