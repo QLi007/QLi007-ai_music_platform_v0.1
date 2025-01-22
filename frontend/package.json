@@ -14,6 +14,7 @@
     "test:ci": "jest --ci --coverage --maxWorkers=2"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@swc/jest": "^0.2.37",
     "@types/axios": "^0.9.36",
     "axios": "^1.7.9",
