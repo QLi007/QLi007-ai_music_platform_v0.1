@@ -30,7 +30,7 @@ import java.util.UUID;
  */
 @Tag(name = "音乐生成", description = "音乐生成相关接口，包括音乐生成、查询、状态更新等功能")
 @RestController
-@RequestMapping("/api/v1/music")
+@RequestMapping("/music")
 @RequiredArgsConstructor
 public class MusicController {
 
