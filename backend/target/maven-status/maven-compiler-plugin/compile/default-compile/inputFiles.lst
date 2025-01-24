@@ -1,7 +1,6 @@
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/service/impl/MusicServiceImpl.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/service/MusicService.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/controller/MusicController.java
-/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/dto/MusicResponse.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/entity/MusicStatus.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/dto/MusicGenerationRequest.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/aspect/LoggingAspect.java
@@ -9,6 +8,7 @@
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/entity/Music.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/exception/GlobalExceptionHandler.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/config/WebConfig.java
+/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/service/impl/MusicServiceImpl.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/dto/ErrorResponse.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/AiMusicApplication.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/repository/MusicRepository.java
@@ -16,6 +16,5 @@
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/config/MonitoringConfig.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/exception/EntityNotFoundException.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/repository/MusicRepository.java
-/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/dto/MusicGenerationRequest.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/config/OpenApiConfig.java
 /Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/dto/MusicDTO.java

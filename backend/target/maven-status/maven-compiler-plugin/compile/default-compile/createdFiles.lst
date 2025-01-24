@@ -6,6 +6,7 @@ com/aimusic/backend/domain/dto/MusicDTO.class
 com/aimusic/backend/exception/EntityNotFoundException.class
 com/aimusic/backend/domain/entity/Music.class
 com/aimusic/backend/domain/dto/ErrorResponse$ErrorResponseBuilder.class
+com/aimusic/backend/config/WebConfig.class
 com/aimusic/backend/domain/dto/MusicGenerationRequest$MusicGenerationRequestBuilder.class
 com/aimusic/backend/config/AsyncConfig.class
 com/aimusic/backend/aspect/PerformanceMonitorAspect.class

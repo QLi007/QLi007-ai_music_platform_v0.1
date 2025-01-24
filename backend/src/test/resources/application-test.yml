@@ -17,7 +17,17 @@ spring:
     console:
       enabled: true
 
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+    include-exception: false
+  servlet:
+    context-path: /
+
 logging:
   level:
     org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE 
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    com.aimusic.backend: DEBUG 

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="9.3">
-<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/dto/MusicResponse.java">
-<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
-</file>
-<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/dto/MusicGenerationRequest.java">
-<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
-</file>
 <file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/repository/MusicRepository.java">
 <error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
 </file>
@@ -33,6 +27,9 @@
 <error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
 </file>
 <file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/aspect/PerformanceMonitorAspect.java">
+<error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
+</file>
+<file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/service/impl/MusicServiceImpl.java">
 <error line="1" severity="warning" message="File does not end with a newline." source="com.puppycrawl.tools.checkstyle.checks.NewlineAtEndOfFileCheck"/>
 </file>
 <file name="/Users/lijinggao/Downloads/AI_music_v0.1/backend/src/main/java/com/aimusic/backend/domain/dto/MusicDTO.java">

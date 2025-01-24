@@ -58,7 +58,7 @@ class MusicControllerTest {
         when(musicService.generateMusic(any(MusicGenerationRequest.class)))
                 .thenReturn(musicDTO);
 
-        mockMvc.perform(post("/api/v1/music/generate")
+        mockMvc.perform(post("/music/generate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -71,7 +71,7 @@ class MusicControllerTest {
         when(musicService.getMusicById(any(UUID.class)))
                 .thenReturn(musicDTO);
 
-        mockMvc.perform(get("/api/v1/music/{id}", musicDTO.getId()))
+        mockMvc.perform(get("/music/{id}", musicDTO.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(musicDTO.getId().toString()))
                 .andExpect(jsonPath("$.title").value(musicDTO.getTitle()));
@@ -83,7 +83,7 @@ class MusicControllerTest {
         when(musicService.listMusic(any(Pageable.class)))
                 .thenReturn(page);
 
-        mockMvc.perform(get("/api/v1/music"))
+        mockMvc.perform(get("/music"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].id").value(musicDTO.getId().toString()))
                 .andExpect(jsonPath("$.content[0].title").value(musicDTO.getTitle()));
@@ -93,7 +93,7 @@ class MusicControllerTest {
     void shouldUpdateMusicStatus_whenValidRequest() throws Exception {
         String url = "https://example.com/updated.mp3";
 
-        mockMvc.perform(put("/api/v1/music/{id}/status", musicDTO.getId())
+        mockMvc.perform(put("/music/{id}/status", musicDTO.getId())
                 .param("url", url))
                 .andExpect(status().isOk());
     }
@@ -102,7 +102,7 @@ class MusicControllerTest {
     void shouldReturn400_whenInvalidRequest() throws Exception {
         request.setDuration(-1); // Invalid duration
 
-        mockMvc.perform(post("/api/v1/music/generate")
+        mockMvc.perform(post("/music/generate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
