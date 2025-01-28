@@ -1,59 +1,117 @@
 package com.aimusic.backend.domain.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 /**
- * 音乐生成请求
- * 包含生成音乐所需的所有参数
- * 
- * @author AI Music Team
- * @version 0.1.0
+ * 音乐生成请求DTO
+ * 用于接收前端的音乐生成请求参数
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class MusicGenerationRequest {
+    
+    /**
+     * 提示词
+     */
+    @NotBlank(message = "提示词不能为空")
+    @Size(min = 1, max = 1000, message = "提示词长度必须在1-1000之间")
+    private String prompt;
+    
+    /**
+     * 音乐风格
+     */
+    @NotBlank(message = "音乐风格不能为空")
+    private String style;
+    
+    /**
+     * 音乐时长(秒)
+     */
+    @NotNull(message = "音乐时长不能为空")
+    private Integer duration;
+    
+    /**
+     * 用户ID
+     */
+    @NotNull(message = "用户ID不能为空")
+    private UUID userId;
+    
+    /**
+     * 生成任务ID
+     */
+    private String generationId;
+    
+    /**
+     * 是否等待音频生成完成
+     */
+    @Builder.Default
+    private boolean waitAudio = false;
+    
+    /**
+     * 是否生成歌词
+     */
+    @Builder.Default
+    private boolean generateLyrics = true;
+    
+    /**
+     * 是否使用AI声音
+     */
+    @Builder.Default
+    private boolean useAiVoice = false;
+    
     /**
      * 音乐标题
      */
-    @NotBlank(message = "标题不能为空")
-    @Size(max = 100, message = "标题长度不能超过100个字符")
+    @NotBlank(message = "音乐标题不能为空")
     private String title;
-
+    
     /**
-     * 提示词
-     * 用于描述想要生成的音乐风格和特点
+     * 音乐描述
      */
-    @NotBlank(message = "提示词不能为空")
-    @Size(min = 5, max = 500, message = "提示词长度必须在5-500字符之间")
-    @Pattern(regexp = "^[\\u4E00-\\u9FA5A-Za-z0-9\\s,.!?，。！？]+$", 
-            message = "提示词只能包含中文、英文、数字和基本标点符号")
-    private String prompt;
-
+    private String description;
+    
     /**
-     * 音乐风格
-     * 例如：古典、流行、爵士、电子等
+     * 生成参数
      */
-    @NotBlank(message = "音乐风格不能为空")
-    @Pattern(regexp = "^(Classical|Jazz|Rock|Pop|Electronic)$", message = "不支持的音乐风格")
-    private String style;
-
+    private GenerationParams params;
+    
     /**
-     * 音乐时长（秒）
-     * 限制在10秒到300秒之间
+     * 音乐生成参数
      */
-    @NotNull(message = "音乐时长不能为空")
-    @Min(value = 30, message = "音乐时长不能小于30秒")
-    @Max(value = 300, message = "音乐时长不能超过300秒")
-    private Integer duration;
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class GenerationParams {
+        /**
+         * 温度参数(0.0-1.0)
+         * 控制生成音乐的随机性
+         */
+        @Builder.Default
+        private Double temperature = 0.8;
+        
+        /**
+         * 节奏类型
+         */
+        private String rhythm;
+        
+        /**
+         * 情感类型
+         */
+        private String emotion;
+        
+        /**
+         * 乐器类型
+         */
+        private String instrument;
+    }
 } 

@@ -34,6 +34,11 @@
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
 
+        <!-- 检查包名 -->
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+        </module>
+
         <!-- 检查修饰符 -->
         <module name="ModifierOrder"/>
         <module name="RedundantModifier"/>

@@ -19,23 +19,23 @@ public interface MusicService {
      * 生成音乐
      *
      * @param request 音乐生成请求
-     * @return 生成的音乐信息
+     * @return 音乐DTO
      */
     MusicDTO generateMusic(MusicGenerationRequest request);
     
     /**
-     * 获取音乐详情
+     * 根据ID获取音乐
      *
      * @param id 音乐ID
-     * @return 音乐详情
+     * @return 音乐DTO
      */
     MusicDTO getMusicById(UUID id);
     
     /**
-     * 分页查询音乐列表
+     * 分页获取音乐列表
      *
      * @param pageable 分页参数
-     * @return 音乐列表
+     * @return 音乐DTO分页对象
      */
     Page<MusicDTO> listMusic(Pageable pageable);
     
@@ -43,7 +43,15 @@ public interface MusicService {
      * 更新音乐状态
      *
      * @param id 音乐ID
-     * @param url 音乐URL
+     * @param url 音频URL
+     * @return 更新后的音乐DTO
      */
-    void updateMusicStatus(UUID id, String url);
+    MusicDTO updateMusicStatus(UUID id, String url);
+
+    /**
+     * 删除音乐
+     *
+     * @param id 音乐ID
+     */
+    void deleteMusic(UUID id);
 } 

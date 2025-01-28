@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -24,4 +26,10 @@ public interface MusicRepository extends JpaRepository<Music, UUID> {
      * @return 音乐分页结果
      */
     Page<Music> findAllByOrderByCreatedAtDesc(Pageable pageable);
+
+    Optional<Music> findByGenerationId(String generationId);
+
+    List<Music> findByUserId(UUID userId);
+
+    Page<Music> findByUserId(UUID userId, Pageable pageable);
 } 

@@ -1,7 +1,7 @@
 package com.aimusic.backend.domain.entity;
 
 /**
- * 音乐状态枚举
+ * 音乐生成状态枚举
  * 
  * @author AI Music Team
  * @version 0.1.0
@@ -18,12 +18,17 @@ public enum MusicStatus {
     GENERATING,
     
     /**
-     * 生成完成
+     * 生成成功
      */
     COMPLETED,
     
     /**
      * 生成失败
      */
-    FAILED
+    FAILED,
+    
+    /**
+     * 已取消
+     */
+    CANCELLED
 } 

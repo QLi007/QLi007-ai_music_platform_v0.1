@@ -37,3 +37,10 @@ server:
     include-exception: false
   servlet:
     context-path: /api/v1 
+
+suno:
+  api:
+    base-url: https://api.suno.ai
+    api-key: your-api-key-here
+    timeout: 30000
+    max-retries: 3 

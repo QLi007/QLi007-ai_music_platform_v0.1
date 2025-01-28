@@ -30,4 +30,24 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    com.aimusic.backend: DEBUG 
+    com.aimusic.backend: DEBUG
+
+# 存储配置
+storage:
+  location: test-uploads
+  max-file-size: 1048576  # 1MB
+  allowed-file-types:
+    - .mp3
+    - .wav
+    - .m4a
+    - .aac
+  url-prefix: /files
+  temp-dir: test-temp
+  use-original-filename: false
+  max-filename-length: 100
+
+# Suno API配置
+suno:
+  api:
+    base-url: http://api.suno.ai
+    cookie: test-cookie 
