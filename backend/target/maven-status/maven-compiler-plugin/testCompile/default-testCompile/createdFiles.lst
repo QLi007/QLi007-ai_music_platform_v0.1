@@ -1,5 +1,0 @@
-com/aimusic/backend/service/MusicServiceTest.class
-com/aimusic/backend/utils/TestDataFactory.class
-com/aimusic/backend/config/TestConfig.class
-com/aimusic/backend/controller/StorageControllerTest.class
-com/aimusic/backend/integration/BaseIntegrationTest.class

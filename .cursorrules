@@ -22,6 +22,10 @@ and the api documentation.
 each time you make a change, you should add a summary comment to describe the change,
 including the change name, the change purpose, the change structure, and the change usage, 
 and the api documentation.
+before run or test codes, system and carefully recheck if the missing files
+actually exist, fix lints and errors.
+when you add or delete or change codes, tell me the reason why delete or add, and their functions they works.
+
 
 each time only write a file or a function,then run the test to make sure the test is passed.
 each time error occurs, you should tell me why it happens, and then fix the error,

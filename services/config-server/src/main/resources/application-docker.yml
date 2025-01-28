@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${CONFIG_GIT_URI}
+          default-label: ${CONFIG_GIT_BRANCH:main}
+          search-paths: ${CONFIG_SEARCH_PATHS:/*}
+  security:
+    user:
+      name: ${CONFIG_USERNAME}
+      password: ${CONFIG_PASSWORD}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-server:8761/eureka/
+  instance:
+    preferIpAddress: true
+
+encrypt:
+  key: ${ENCRYPT_KEY} 

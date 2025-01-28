@@ -1,0 +1,45 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${CONFIG_GIT_URI:https://github.com/your-org/ai-music-config}
+          default-label: ${CONFIG_GIT_BRANCH:main}
+          search-paths: ${CONFIG_SEARCH_PATHS:/*}
+          clone-on-start: true
+          force-pull: true
+          timeout: 5
+          deleteUntrackedBranches: true
+  security:
+    user:
+      name: ${CONFIG_USERNAME:config}
+      password: ${CONFIG_PASSWORD:password}
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+encrypt:
+  key: ${ENCRYPT_KEY:your-secret-key}
+
+logging:
+  level:
+    org.springframework.cloud.config: DEBUG
+    org.springframework.boot.autoconfigure.security: INFO 
