@@ -3,10 +3,14 @@ package com.aimusic.backend.service;
 import com.aimusic.backend.domain.dto.MusicDTO;
 import com.aimusic.backend.domain.dto.MusicGenerationRequest;
 import com.aimusic.backend.domain.entity.Music;
-import com.aimusic.backend.domain.entity.MusicStatus;
+import com.aimusic.backend.domain.enums.MusicStatus;
+import com.aimusic.backend.domain.entity.User;
 import com.aimusic.backend.domain.repository.MusicRepository;
+import com.aimusic.backend.domain.repository.UserRepository;
+import com.aimusic.backend.domain.service.MusicService;
 import com.aimusic.backend.domain.service.impl.MusicServiceImpl;
 import com.aimusic.backend.exception.EntityNotFoundException;
+import com.aimusic.backend.utils.MusicTestFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,11 +24,14 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -37,71 +44,107 @@ class MusicServiceTest {
     @Mock
     private MusicRepository musicRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private StorageService storageService;
+
     @InjectMocks
     private MusicServiceImpl musicService;
 
     private Music mockMusic;
     private MusicGenerationRequest mockRequest;
+    private User mockUser;
     private UUID mockId;
 
     @BeforeEach
     void setUp() {
         mockId = UUID.randomUUID();
+        mockUser = MusicTestFactory.createTestUser();
+        when(userRepository.findById(mockUser.getId())).thenReturn(Optional.of(mockUser));
         
         // 初始化测试用的Music实体
-        mockMusic = new Music();
-        mockMusic.setId(mockId);
-        mockMusic.setPrompt("测试提示词");
-        mockMusic.setStyle("古典");
-        mockMusic.setDuration(60);
-        mockMusic.setStatus(MusicStatus.PENDING);
-        mockMusic.setCreatedAt(LocalDateTime.now());
-        mockMusic.setUpdatedAt(LocalDateTime.now());
+        mockMusic = Music.builder()
+                .id(mockId)
+                .user(mockUser)
+                .prompt("测试提示词")
+                .style("古典")
+                .duration(60)
+                .status(MusicStatus.PENDING)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
 
         // 初始化测试用的请求对象
-        mockRequest = new MusicGenerationRequest();
-        mockRequest.setPrompt("测试提示词");
-        mockRequest.setStyle("古典");
-        mockRequest.setDuration(60);
+        mockRequest = MusicGenerationRequest.builder()
+                .prompt("测试提示词")
+                .style("古典")
+                .duration(60)
+                .userId(mockUser.getId())
+                .build();
     }
 
     @Test
     void generateMusic_ShouldCreateNewMusic() {
-        // Given
+        // Arrange
+        MusicGenerationRequest request = MusicGenerationRequest.builder()
+                .prompt("测试音乐")
+                .style("古典")
+                .duration(60)
+                .userId(mockUser.getId())
+                .build();
+        
         when(musicRepository.save(any(Music.class))).thenReturn(mockMusic);
-
-        // When
-        MusicDTO result = musicService.generateMusic(mockRequest);
-
-        // Then
-        assertThat(result).isNotNull();
-        assertThat(result.getPrompt()).isEqualTo(mockRequest.getPrompt());
-        assertThat(result.getStyle()).isEqualTo(mockRequest.getStyle());
-        assertThat(result.getDuration()).isEqualTo(mockRequest.getDuration());
-        assertThat(result.getStatus()).isEqualTo(MusicStatus.PENDING);
+        
+        // Act
+        MusicDTO result = musicService.generateMusic(request);
+        
+        // Assert
+        assertNotNull(result);
+        assertNotNull(result.getId());
+        assertEquals(request.getPrompt(), result.getPrompt());
+        assertEquals(request.getStyle(), result.getStyle());
+        assertEquals(request.getDuration(), result.getDuration());
+        assertEquals(request.getUserId(), result.getUserId());
+        
         verify(musicRepository).save(any(Music.class));
     }
 
     @Test
-    void getMusicById_ShouldReturnMusic_WhenMusicExists() {
-        // Given
-        when(musicRepository.findById(mockId)).thenReturn(Optional.of(mockMusic));
+    void generateMusic_ShouldThrowException_WhenUserNotFound() {
+        // Arrange
+        when(userRepository.findById(mockUser.getId())).thenReturn(Optional.empty());
 
-        // When
-        MusicDTO result = musicService.getMusicById(mockId);
-
-        // Then
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(mockId);
-        verify(musicRepository).findById(mockId);
+        // Act & Assert
+        assertThatThrownBy(() -> musicService.generateMusic(mockRequest))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessageContaining("用户不存在");
     }
 
     @Test
-    void getMusicById_ShouldThrowException_WhenMusicNotExists() {
-        // Given
-        when(musicRepository.findById(mockId)).thenReturn(Optional.empty());
+    void getMusicById_ShouldReturnMusic_WhenMusicExists() {
+        // Arrange
+        when(musicRepository.findById(any(UUID.class))).thenReturn(Optional.of(mockMusic));
+        
+        // Act
+        MusicDTO result = musicService.getMusicById(mockMusic.getId());
+        
+        // Assert
+        assertNotNull(result);
+        assertNotNull(result.getId());
+        assertEquals(mockMusic.getPrompt(), result.getPrompt());
+        assertEquals(mockMusic.getStyle(), result.getStyle());
+        assertEquals(mockMusic.getDuration(), result.getDuration());
+        assertEquals(mockMusic.getUserId(), result.getUserId());
+    }
 
-        // When/Then
+    @Test
+    void getMusicById_ShouldThrowException_WhenMusicNotFound() {
+        // Arrange
+        when(musicRepository.findById(mockId)).thenReturn(Optional.empty());
+        
+        // Act & Assert
         assertThatThrownBy(() -> musicService.getMusicById(mockId))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("音乐不存在");
@@ -109,46 +152,56 @@ class MusicServiceTest {
 
     @Test
     void listMusic_ShouldReturnPageOfMusic() {
-        // Given
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Music> mockPage = new PageImpl<>(Collections.singletonList(mockMusic));
-        when(musicRepository.findAllByOrderByCreatedAtDesc(pageable)).thenReturn(mockPage);
-
-        // When
+        List<Music> musicList = Collections.singletonList(mockMusic);
+        Page<Music> musicPage = new PageImpl<>(musicList, pageable, 1);
+        
+        when(musicRepository.findAllByOrderByCreatedAtDesc(pageable))
+                .thenReturn(musicPage);
+        
+        // Act
         Page<MusicDTO> result = musicService.listMusic(pageable);
-
-        // Then
-        assertThat(result).isNotNull();
-        assertThat(result.getContent()).hasSize(1);
-        assertThat(result.getContent().get(0).getId()).isEqualTo(mockId);
-        verify(musicRepository).findAllByOrderByCreatedAtDesc(pageable);
+        
+        // Assert
+        assertNotNull(result);
+        assertEquals(1, result.getTotalElements());
+        assertEquals(1, result.getContent().size());
+        
+        MusicDTO musicDTO = result.getContent().get(0);
+        assertNotNull(musicDTO);
+        assertEquals(mockMusic.getPrompt(), musicDTO.getPrompt());
+        assertEquals(mockMusic.getStyle(), musicDTO.getStyle());
+        assertEquals(mockMusic.getDuration(), musicDTO.getDuration());
+        assertEquals(mockMusic.getUserId(), musicDTO.getUserId());
     }
 
     @Test
     void updateMusicStatus_ShouldUpdateStatus_WhenMusicExists() {
-        // Given
-        String url = "http://example.com/music.mp3";
+        // Arrange
+        String audioUrl = "http://example.com/music.mp3";
         when(musicRepository.findById(mockId)).thenReturn(Optional.of(mockMusic));
         when(musicRepository.save(any(Music.class))).thenReturn(mockMusic);
 
-        // When
-        musicService.updateMusicStatus(mockId, url);
+        // Act
+        MusicDTO result = musicService.updateMusicStatus(mockId, audioUrl);
 
-        // Then
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result.getStatus()).isEqualTo(MusicStatus.COMPLETED);
+        assertThat(result.getAudioUrl()).isEqualTo(audioUrl);
         verify(musicRepository).findById(mockId);
         verify(musicRepository).save(any(Music.class));
-        assertThat(mockMusic.getStatus()).isEqualTo(MusicStatus.COMPLETED);
-        assertThat(mockMusic.getUrl()).isEqualTo(url);
     }
 
     @Test
     void updateMusicStatus_ShouldThrowException_WhenMusicNotExists() {
-        // Given
-        String url = "http://example.com/music.mp3";
+        // Arrange
+        String audioUrl = "http://example.com/music.mp3";
         when(musicRepository.findById(mockId)).thenReturn(Optional.empty());
 
-        // When/Then
-        assertThatThrownBy(() -> musicService.updateMusicStatus(mockId, url))
+        // Act & Assert
+        assertThatThrownBy(() -> musicService.updateMusicStatus(mockId, audioUrl))
                 .isInstanceOf(EntityNotFoundException.class)
                 .hasMessageContaining("音乐不存在");
     }

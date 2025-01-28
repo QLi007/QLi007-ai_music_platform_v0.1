@@ -30,6 +30,21 @@ spring:
     baseline-on-migrate: true
     locations: classpath:db/migration
     
+# 缓存配置
+cache:
+  type: caffeine
+  caffeine:
+    spec: maximumSize=500,expireAfterWrite=30m
+
+# Suno API配置
+suno:
+  api:
+    base-url: ${SUNO_API_BASE_URL:https://api.suno.ai}
+    api-key: ${SUNO_API_KEY}
+    connect-timeout: 30
+    read-timeout: 30
+    max-retries: 3
+    
 # 服务器配置
 server:
   port: ${PORT:8080}
@@ -90,3 +105,17 @@ logging:
     com.aimusic: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE 
+
+# 存储配置
+storage:
+  location: uploads
+  max-file-size: 104857600  # 100MB
+  allowed-file-types:
+    - .mp3
+    - .wav
+    - .m4a
+    - .aac
+  url-prefix: /files
+  temp-dir: temp
+  use-original-filename: false
+  max-filename-length: 100 

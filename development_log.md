@@ -720,3 +720,332 @@
 - 添加单元测试和集成测试
 - 优化错误处理和日志记录
 - 添加API访问限制和安全控制
+
+## 日期: 2024-01-24
+
+### 代码库清理和恢复
+1. 清理操作：
+   - 清理了所有编译生成的文件（backend/target/）
+   - 清理了前端构建缓存（frontend/.next/）
+   - 移除了所有未追踪的文件
+
+2. 恢复操作：
+   - 使用git clean -fd清理未追踪文件
+   - 使用git checkout .恢复文件到最新版本
+   - 确保代码库与最新git版本一致
+
+3. 操作结果：
+   - 成功清理了所有非git管理的文件
+   - 代码库已恢复到最新的稳定版本
+   - 移除了所有冗余和临时文件
+
+### 服务启动记录
+1. 后端服务启动：
+   - 执行 `mvn clean install` 清理并构建项目
+   - 执行 `mvn spring-boot:run` 启动Spring Boot服务
+   - 服务访问地址：http://localhost:8080
+   - API文档地址：http://localhost:8080/api/v1/swagger-ui.html
+
+2. 前端服务启动：
+   - 执行 `npm install` 安装依赖
+   - 执行 `npm run dev` 启动开发服务器
+   - 服务访问地址：http://localhost:3000
+
+3. 服务访问验证：
+   - 后端健康检查：http://localhost:8080/api/v1/actuator/health
+   - 前端首页访问：http://localhost:3000
+   - API文档访问：http://localhost:8080/api/v1/swagger-ui.html
+
+### 问题修复记录
+1. 音乐列表获取失败问题：
+   - 问题描述：前端显示"Failed to fetch"错误
+   - 原因分析：
+     - 缺少开发环境配置文件
+     - 数据库连接配置不正确
+     - 环境变量未正确设置
+   
+   - 解决方案：
+     - 创建application-dev.yml配置文件
+     - 配置开发环境数据库连接
+     - 使用dev profile启动服务
+   
+   - 后续计划：
+     - 完善数据库迁移脚本
+     - 添加更多测试数据
+     - 优化错误处理机制
+     - 完善日志记录
+
+## 2024-01-23 DTO文件结构优化
+
+### 变更内容
+- 清理了重复的DTO文件结构
+- 删除了`backend/src/main/java/com/aimusic/backend/dto/`目录下的冗余文件:
+  - MusicResponse.java
+  - MusicGenerationRequest.java
+- 保留了`domain/dto`目录作为主要DTO存放位置
+- 保留了特殊用途的DTO目录(mubert, voice)
+
+### 当前DTO结构
+- domain/dto/: 核心业务DTO
+  - MusicDTO.java
+  - MusicGenerationRequest.java
+  - ErrorResponse.java
+- dto/mubert/: Mubert集成相关DTO
+  - MubertGenerateRequest.java
+  - MubertGenerateResponse.java
+- dto/voice/: 语音相关DTO
+  - VoiceDTO.java
+  - VoiceRequest.java
+
+### 后续计划
+- 考虑将所有DTO统一迁移到domain/dto目录
+- 为不同类型的DTO创建子目录以保持结构清晰
+- 更新相关文档以反映新的目录结构
+
+## 测试执行记录 (2024-01-23)
+
+### 测试覆盖情况
+- 总计: 13个测试用例全部通过
+- MusicRepositoryTest: 2个测试
+- MusicControllerTest: 5个测试
+- MusicServiceTest: 6个测试
+
+### 性能指标
+- MusicController.listMusic: ~11ms
+- MusicController.generateMusic: <1ms
+- MusicController.getMusicById: <1ms
+- MusicController.updateMusicStatus: <1ms
+
+### 数据库操作
+- Flyway迁移成功执行
+- H2测试数据库正常工作
+- Hibernate SQL查询执行正常
+
+### 日志系统
+- 请求/响应日志记录完整
+- 性能监控数据记录准确
+- SQL语句记录正确
+
+### 后续优化计划
+1. 考虑添加更多边界测试用例
+2. 优化数据库查询性能
+3. 完善错误处理测试
+4. 添加并发测试场景
+
+## 端到端测试记录 (2024-01-24)
+
+### 服务启动流程
+1. 端口清理:
+   - 检查端口占用: `lsof -i :3000,8080`
+   - 发现3000端口被占用(PID: 7614)
+   - 清理占用进程: `kill -9 7614`
+
+2. 后端服务启动:
+   - 执行命令: `mvn spring-boot:run -Dspring-boot.run.profiles=dev`
+   - 使用开发环境配置
+   - 服务地址: http://localhost:8080
+   - API文档: http://localhost:8080/api/v1/swagger-ui.html
+
+3. 前端服务启动:
+   - 执行命令: `cd frontend && npm install && npm run dev`
+   - 服务地址: http://localhost:3000
+
+### 测试计划
+1. 基础功能测试:
+   - 访问前端首页
+   - 检查API健康状态
+   - 验证数据库连接
+   - 测试音乐生成功能
+   - 测试音乐列表获取
+
+2. 错误处理测试:
+   - 测试无效请求处理
+   - 验证错误提示信息
+   - 检查日志记录
+
+3. 性能测试:
+   - 检查响应时间
+   - 监控资源使用
+   - 验证并发处理
+
+### 注意事项
+- 确保PostgreSQL数据库运行正常
+- 检查环境变量配置完整性
+- 验证CORS设置是否正确
+- 监控服务日志输出
+
+### 服务检查结果
+1. 后端服务状态:
+   - 服务成功启动在8080端口
+   - 数据库连接正常
+   - Flyway迁移成功执行
+   - 数据表正确创建:
+     - flyway_schema_history
+     - music
+
+2. 前端服务状态:
+   - 服务成功启动在3000端口
+   - 页面正常响应
+   - HTTP状态码: 200 OK
+
+### 发现的问题
+1. 后端健康检查端点访问异常
+   - 需要检查actuator配置
+   - 可能需要调整端点暴露设置
+   - 建议添加安全配置
+
+2. 后续优化建议
+   - 完善健康检查机制
+   - 添加数据库连接池监控
+   - 实现服务优雅关闭
+   - 添加更多监控指标
+
+### 配置更新记录 (2024-01-24)
+1. 创建开发环境配置文件 `application-dev.yml`:
+   - 配置本地PostgreSQL数据库连接
+   - 启用SQL日志记录
+   - 配置Hibernate自动更新模式
+   - 优化错误响应格式
+   - 配置日志级别
+
+2. 环境变量配置:
+   - 数据库URL: jdbc:postgresql://localhost:5432/aimusic
+   - 数据库用户名: postgres
+   - 数据库密码: postgres
+   - 服务端口: 8080
+   - 上下文路径: /api/v1
+
+3. 日志配置优化:
+   - 启用Hibernate SQL日志
+   - 启用参数绑定日志
+   - 配置应用日志级别为DEBUG
+
+4. 错误处理配置:
+   - 包含错误消息
+   - 包含绑定错误
+   - 禁用堆栈跟踪
+   - 禁用异常详情
+
+### 后续计划
+1. 监控配置:
+   - 添加性能监控
+   - 配置健康检查
+   - 添加指标收集
+   - 配置告警规则
+
+2. 安全配置:
+   - 配置CORS规则
+   - 添加请求限流
+   - 配置安全头
+   - 实现认证授权
+
+## 代码库状态检查 (2024-01-24)
+
+### 目录结构
+1. 后端代码结构:
+   ```
+   backend/src/main/java/com/aimusic/backend/
+   ├── domain/
+   │   └── dto/           # 数据传输对象
+   │       ├── MusicDTO.java
+   │       ├── MusicGenerationRequest.java
+   │       └── ErrorResponse.java
+   ├── exception/         # 异常处理
+   ├── repository/        # 数据访问层
+   ├── controller/        # 控制器
+   ├── config/           # 配置类
+   ├── aspect/           # 切面类
+   └── AiMusicApplication.java
+   ```
+
+2. 前端代码结构:
+   ```
+   frontend/src/
+   ├── app/              # 页面路由
+   ├── components/       # UI组件
+   ├── services/         # API服务
+   ├── store/           # 状态管理
+   ├── types/           # 类型定义
+   ├── constants/       # 常量定义
+   └── __tests__/       # 测试文件
+   ```
+
+3. 测试代码结构:
+   ```
+   backend/src/test/java/com/aimusic/backend/
+   ├── controller/       # 控制器测试
+   ├── service/         # 服务测试
+   ├── repository/      # 仓库测试
+   ├── config/          # 配置测试
+   └── utils/           # 测试工具
+   ```
+
+### 代码质量检查
+1. 后端:
+   - DTO结构已统一到domain/dto目录
+   - 测试覆盖了主要功能模块
+   - 使用了切面进行日志和性能监控
+   - 配置了开发环境配置文件
+
+2. 前端:
+   - 采用了清晰的目录结构
+   - 实现了组件化开发
+   - 使用TypeScript保证类型安全
+   - 包含了测试目录
+
+### 待优化项目
+1. 后端:
+   - 完善异常处理机制
+   - 添加更多单元测试
+   - 优化数据库查询性能
+   - 完善API文档
+
+2. 前端:
+   - 添加组件测试
+   - 实现状态管理
+   - 优化构建配置
+   - 完善错误处理
+
+### 下一步计划
+1. 代码质量改进:
+   - 运行SonarQube分析
+   - 修复代码异味
+   - 提高测试覆盖率
+   - 优化性能指标
+
+2. 文档完善:
+   - 更新API文档
+   - 完善开发文档
+   - 添加部署文档
+   - 编写测试文档
+
+## 2024-01-24 DTO目录结构优化
+
+### 变更内容
+1. 确认了主要DTO位置为 `backend/src/main/java/com/aimusic/backend/domain/dto/`
+2. 当前DTO文件包括:
+   - MusicDTO.java (1001B)
+   - MusicGenerationRequest.java (1.8KB)
+   - ErrorResponse.java (956B)
+
+### 目录结构说明
+- domain/dto/: 存放所有业务相关的DTO
+  - 音乐生成和管理相关DTO
+  - 错误响应DTO
+  - 其他业务DTO
+
+### 后续计划
+1. 代码优化:
+   - 完善DTO字段验证
+   - 添加详细的API文档注释
+   - 实现DTO与实体类的映射
+   
+2. 测试完善:
+   - 添加DTO单元测试
+   - 验证序列化/反序列化
+   - 测试参数验证
+
+3. 性能优化:
+   - 考虑使用DTO映射工具
+   - 实现DTO缓存机制
+   - 优化序列化性能

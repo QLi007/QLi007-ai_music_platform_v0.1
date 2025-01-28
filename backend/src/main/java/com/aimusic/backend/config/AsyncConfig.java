@@ -1,74 +1,47 @@
 package com.aimusic.backend.config;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
 import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy;
 
 /**
  * 异步任务配置类
- * 配置异步任务执行器和异常处理
- *
- * @author AI Music Team
- * @version 0.1.0
+ * 配置异步任务执行器
  */
-@Slf4j
 @Configuration
 @EnableAsync
-public class AsyncConfig implements AsyncConfigurer {
-
+public class AsyncConfig {
+    
     /**
-     * 配置音乐生成任务执行器
+     * 配置音乐生成专用线程池
      */
     @Bean(name = "musicGenerationExecutor")
     public Executor musicGenerationExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(2);
         executor.setMaxPoolSize(4);
-        executor.setQueueCapacity(100);
+        executor.setQueueCapacity(50);
         executor.setThreadNamePrefix("music-generation-");
-        executor.setRejectedExecutionHandler((r, e) -> {
-            log.error("音乐生成任务队列已满，拒绝执行新任务");
-            throw new RuntimeException("系统繁忙，请稍后重试");
-        });
+        executor.setRejectedExecutionHandler(new CallerRunsPolicy());
         executor.initialize();
         return executor;
     }
 
     /**
-     * 配置默认异步任务执行器
+     * 配置默认异步任务线程池
      */
-    @Override
-    public Executor getAsyncExecutor() {
+    @Bean(name = "taskExecutor")
+    public Executor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(4);
         executor.setMaxPoolSize(8);
-        executor.setQueueCapacity(200);
+        executor.setQueueCapacity(100);
         executor.setThreadNamePrefix("async-task-");
-        executor.setRejectedExecutionHandler((r, e) -> {
-            log.error("异步任务队列已满，拒绝执行新任务");
-            throw new RuntimeException("系统繁忙，请稍后重试");
-        });
+        executor.setRejectedExecutionHandler(new CallerRunsPolicy());
         executor.initialize();
         return executor;
-    }
-
-    /**
-     * 配置异步任务异常处理器
-     */
-    @Override
-    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-        return (ex, method, params) -> {
-            log.error("异步任务执行异常 - 方法: {}, 参数: {}, 异常: {}",
-                    method.getName(),
-                    params,
-                    ex.getMessage(),
-                    ex);
-        };
     }
 } 
